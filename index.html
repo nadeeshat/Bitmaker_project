@@ -8,35 +8,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Unkempt" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Henny+Penny" rel="stylesheet">
   </head>
   <body>
-    <div class="container">
+    <!-- Home Page -->
+    <div class="container-home">
+      <header class="top-area">
+        <div class="logo">
+          <img src="images/deck_logo.png" alt="Logo">
+        </div>
+        <div class="nav-btn">
+          <button type="button" name="button" class="btn hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </button>
+        </div>
+        <nav class="nav-menu" id="nav-menu">
+          <ul class="main-menu">
+            <li class="menu-item">Rules</li>
+            <li class="menu-item">Cards</li>
+            <li class="menu-item">Let's Play</li>
+            <li class="menu-item">Credits</li>
+          </ul>
+        </nav>
+      </header>
+      <div class="banner" id="banner">
+        <img src="images/cards_deck_banner_mod.jpg" alt="">
+      </div>
+      <div class="details" id="details">
+        <label id="userlabel" class="userlabel">Your Name</label>
+        <input type="text" id="username" name="username" class="userinput">
+        <button type="button" id="start" name="button" class="start" value="">Play !</button>
+      </div>
+    </div>
+    <!-- Playing Table -->
+    <div class="container-start" id="play-table">
       <div class="auto-player">
         <div class="auto-profile">
-          <h1>Auto Player</h1>
+          <h1>Tharindu</h1>
         </div>
-        <div class="auto-card">
-          <img src="images/blue_back_side.png" alt="">
+        <div id="autoCard" class="auto-card">
+          <img id="autoimg" src="images/blue_back_side.png" alt="">
         </div>
       </div>
-      <div class="button-area">
-        <div class="start-btn">
-          <input type="button" class="btn-play" name="start" value="Start">
+      <div id="buttons-play" class="buttons-before">
+        <div id="start-div" class="start-btn">
+          <button type="button" id="btn-play" class="btn-play" name="start" value="">Start</button>
         </div>
-        <div class="view-btn">
-          <input type="button" class="btn-view" name="view" value="View">
+        <div id="view-div" class="view-btn">
+          <button type="button" id="btn-view" class="before-play" name="view" value="">View</button>
         </div>
-        <div class="select-btn">
-          <input type="button" class="btn-select" name="select" value="Select">
+        <div id="select-div" class="select-btn">
+          <button type="button" id="btn-select" class="before-play" name="select" value="">Select</button>
         </div>
       </div>
       <div class="user-player">
         <div class="user-profile">
-          <h1>User Player</h1>
+          <h1><label id="user-label">User</label></h1>
         </div>
-        <div class="user-card">
-          <img src="images/purple_back_side.png" alt="">
+        <div id="userCard" class="user-card">
+          <img id="userimg" src="images/purple_back_side.png" alt="">
         </div>
+      </div>
+      <div class="exit">
+        <button type="button" id="exit" class="btn-exit" name="exit" value="">Exit</button>
       </div>
     </div>
 
