@@ -84,8 +84,14 @@ function exitGame()
   document.getElementById("btn-select").classList.add("before-play");
 }
 
+// shuffle function distributes the cards between the 2 players at the game start. When this function runs, each player's hands are populated as array of card objects (autoDeck and userDeck)
 function shuffle()
 {
+  // for javascript, we dont need to specify the array length when we initialize it. In fact, doing a push on this will make the array length 27.  
+  // eg. autoArray = new Array(3)
+  // autoArray.push('testPush')
+  // autoArray here will be [undefined, undefined, undefined, 'testPush']
+
   var autoArray = new Array(26);
   var userArray = new Array(26);
 
@@ -102,7 +108,6 @@ function shuffle()
       autoArray.push(currentVal);
     }
   }
-
   for(var j=0;j<26;j++)
   {
     var currentVal = Math.floor(Math.random() * 52);
@@ -130,7 +135,9 @@ function shuffle()
     var cardType = card.substr(0,1);
     var cardVal = card.slice(1);
     var rank = 0;
-
+    // this switch/case is ok too, you could do an array here to represent the rank order:
+    // let ranks = ['A', 'K', 'Q', 'J', '10'...]
+    // cardRank = ranks.indexOf(cardVal)
     switch(cardVal){
       case 'A':
         rank=1;
@@ -256,6 +263,7 @@ function shuffle()
 var viewBtn = document.getElementById("btn-view");
 viewBtn.addEventListener("click", loadCard);
 
+// loadCard will take the last card from teh autoDeck and tack it into the start of autoDeck2. If autoDeck runs out, it will reset autoDeck with autoDeck2. The last card from the userDeck is also taken and placed in userDeck2.
 function loadCard()
 {
     /*if(autoDeck2.length == 26)
@@ -297,6 +305,7 @@ var selectBtn = document.getElementById("btn-select");
 
 selectBtn.addEventListener("click", selectCard);
 
+// selectCard plays the round. A user may only win if they have the same suite as their opponent and a higher rank
 function selectCard()
 {
   //alert("Select Button Clicked !");
@@ -331,15 +340,16 @@ function selectCard()
     autoWon.push(autoCard);
     autoWon.push(userCard);
   }
-
+  // if the autoDeck has run out of cards, reset it
   if(autoDeck2.length == 26)
   {
     autoDeck = autoDeck2;
     autoDeck2 = [];
   }
-
+  // take the last card from the autoDeck and see if it has been played previously and won.
   autoCard = autoDeck.pop();
-
+  // if autoCard is an object representing the card, can we just set a boolean or stringfield on the autoCard when it's been won, and use that instead? 
+  // pop removes teh element from the array. I'm not sure if the intent here is to check the card that is currently displayed (which has already been popped off of autoDeck in loadCard) or to check the next card before it is played?
   autoCard = checkWonAuto(autoCard);
 
   var autoImage = autoCard.img;
@@ -362,7 +372,7 @@ function selectCard()
   //console.log(userCard.img);
   userDeck2.unshift(userCard);
 }
-
+// checks if curCard is already present in teh autoWon or userWon arrays (i.e. has this already been played)
 function checkWonAuto(curCard)
 {
   var okCard;
@@ -386,6 +396,7 @@ function checkWonAuto(curCard)
 
   if(flag == 1)
   {
+    // this will mutate autoDeck to remove the last card.  Should this just be taking the last index, or shifting this card into autoDeck2 at some point? 
     okCard = autoDeck.pop();
 
     okCard = checkWonAuto(okCard);
