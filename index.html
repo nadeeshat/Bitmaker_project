@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Unkempt" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Henny+Penny" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Architects+Daughter" rel="stylesheet">
   </head>
   <body>
     <!-- Home Page -->
-    <div class="container-home">
+    <div id="co-home" class="container-home">
       <header class="top-area">
         <div class="logo">
           <img src="images/deck_logo.png" alt="Logo">
@@ -28,15 +30,15 @@
         </div>
         <nav class="nav-menu" id="nav-menu">
           <ul class="main-menu">
-            <li class="menu-item">Rules</li>
-            <li class="menu-item">Cards</li>
-            <li class="menu-item">Let's Play</li>
-            <li class="menu-item">Credits</li>
+            <li class="menu-item"><a id="rules" href="#blank-rules">Rules</a></li>
+            <li class="menu-item"><a id="cardsDeck" href="#blank-cards">Cards</a></li>
+            <li class="menu-item"><a href="index.html">Let's Play</a></li>
+            <li class="menu-item"><a id="credits" href="#blank-credits">Credits</a></li>
           </ul>
         </nav>
       </header>
       <div class="banner" id="banner">
-        <img src="images/cards_deck_banner_mod.jpg" alt="">
+        <img id="banner-image" src="images/banner1.jpg" alt="">
       </div>
       <div class="details" id="details">
         <label id="userlabel" class="userlabel">Your Name</label>
@@ -48,13 +50,24 @@
     <div class="container-start" id="play-table">
       <div class="auto-player">
         <div class="auto-profile">
-          <h1>Tharindu</h1>
+          <h1 class="auto-name">Tharindu</h1>
+          <p class="auto-cards-left">Cards in Hand
+            <label id="autoCards" class="autoCards"></label>
+          </p>
+          <p class="auto-score">Score
+            <label id="autoScore" class="autoScore"></label>
+          </p>
         </div>
         <div id="autoCard" class="auto-card">
           <img id="autoimg" src="images/blue_back_side.png" alt="">
         </div>
       </div>
       <div id="buttons-play" class="buttons-before">
+        <div id="status-div" class="gameStatusBefore">
+          <!--<img src="images/game_over.png" alt="Game Over">-->
+          <label id="game-msg" class="gameMsg"></label>
+          <label id="winner" class="winnerMsg"></label>
+        </div>
         <div id="start-div" class="start-btn">
           <button type="button" id="btn-play" class="btn-play" name="start" value="">Start</button>
         </div>
@@ -67,17 +80,127 @@
       </div>
       <div class="user-player">
         <div class="user-profile">
-          <h1><label id="user-label">User</label></h1>
+          <h1 class="user-name" id="user-label">User</h1>
+          <p class="user-score">Score
+            <label id="userScore" class="userScore"></label>
+          </p>
+          <p class="user-cards-left">Cards in Hand
+            <label id="userCards" class="userCards"></label>
+          </p>
         </div>
         <div id="userCard" class="user-card">
-          <img id="userimg" src="images/purple_back_side.png" alt="">
+          <img id="userimg" src="images/blue_back_side.png" alt="">
         </div>
       </div>
       <div class="exit">
         <button type="button" id="exit" class="btn-exit" name="exit" value="">Exit</button>
       </div>
     </div>
-
+    <!-- Rules -->
+    <div id="blank-rules" class="blank-div">
+      <div id="co-rules" class="before-play">
+        <div class="rules-title">
+          <h1>Rules of the Game</h1>
+        </div>
+        <div class="rules-body">
+          <ul class="rulesList">
+            <li>This game can be played by 2 players – One player is the user and the website will act as the other player who is called as Tharindu</li>
+            <li>2 Jokers in the deck of cards will not be considered for this game</li>
+            <li>Rest of the cards will be shuffled and divided equally among the 2 players i.e.  26 cards per player and cards will belong to 4 types which are Clubs, Diamonds, Hearts and Spades</li>
+            <li>Each player has to play one card at a time, and that set will win by the player who played the highest card
+                <br>
+                Ex : If Tharindu plays the Hearts 3 and the user plays Hearts 5, then that set will win by the user and the two cards will belong to the user.
+                <br>
+                If the user does not have any card with the type Hearts, the user can play a card of any other type and then irrespective of the value of the card, that set will win by Tharindu and both cards will belong to Tharindu
+                <br>
+                Note : Winning cards should keep separately and should not be again used for playing
+            </li>
+            <li>The card values will be considered in ascending order for any type is as follows.
+                <br>
+                2  < 3 < 4 < 5 < 6 < 7 < 8 < 9 < 10 < J < Q < K < A
+            </li>
+            <li>Player with the highest score at the time of finishing the cards will be the winner ! </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Cards -->
+    <div id="blank-cards" class="blank-div">
+      <div id="co-cards" class="before-play">
+        <div class="cards-title">
+          <h1>Deck of Cards</h1>
+        </div>
+        <div class="cards-spade">
+          <h2>Spades</h2>
+          <img src="images/blue_back_side.png" id="sImg" alt="">
+        </div>
+        <div class="view-spade">
+          <button type="button" id="btnSpade" name="btnSpade" class="btnSpade"><img src="images/reload.png"></button>
+        </div>
+        <div class="view-heart">
+          <button type="button" id="btnHeart" name="btnHeart" class="btnHeart"><img src="images/reload.png"></button>
+        </div>
+        <div class="cards-hearts">
+          <h2>Hearts</h2>
+          <img src="images/blue_back_side.png" id="hImg" alt="">
+        </div>
+        <div class="cards-clubs">
+          <h2>Clubs</h2>
+          <img src="images/blue_back_side.png" id="cImg" alt="">
+        </div>
+        <div class="view-club">
+          <button type="button" id="btnClub" name="btnClub" class="btnClub"><img src="images/reload.png"></button>
+        </div>
+        <div class="view-diamond">
+          <button type="button" id="btnDiamond" name="btnDiamond" class="btnDiamond"><img src="images/reload.png"></button>
+        </div>
+        <div class="cards-diamonds">
+          <h2>Diamonds</h2>
+          <img src="images/blue_back_side.png" id="dImg" alt="">
+        </div>
+      </div>
+    </div>
+    <!-- Credits -->
+    <div id="blank-credits" class="blank-div">
+      <div id="co-credits" class="before-play">
+        <div class="credits-title">
+          <h1>Credits</h1>
+        </div>
+        <div class="credits-myself">
+          <div class="image-me">
+            <img class="self-img" src="images/me.jpg" alt="Tharindu Image">
+          </div>
+          <div class="desc-me">
+            <p class="credits-para">I'm Tharindu and I developed this game of cards mainly with the knowledge I gained from attending the Front End Development (Part time) course at General Assembly Bitmaker. All the instructors who teached the course namely Betty, Rocco and also Misato helped me a lot to achieve this result and very much grateful to them.</p>
+          </div>
+        </div>
+        <div class="credits-bitmaker">
+          <img class="bitmaker-img" src="http://blog.bitmaker.co/content/images/2017/01/GA-Bitmaker-Blog-1400.png" alt="Bitmaker Image">
+        </div>
+        <div class="credits-instructors">
+          <div class="ins-div">
+            <img class="ins-image" src="https://bitmakerhq.s3.amazonaws.com/atlas/production/employee/avatar/11/quote_Betty.jpg" alt="Betty">
+            <h2>Betty</h2>
+          </div>
+          <div class="ins-div">
+            <img class="ins-image" src="https://bitmakerhq.s3.amazonaws.com/atlas/production/employee/avatar/10/quote_Rocco.jpg" alt="Rocco">
+            <h2>Rocco</h2>
+          </div>
+          <div class="ins-div">
+            <img class="ins-image" src="https://pbs.twimg.com/profile_images/746002974053302272/J4VvihIb_400x400.jpg" alt="Misato">
+            <h2>Misato</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <ul>
+        <li class="social"><a href="#">Facebook</a></li>
+        <li class="social"><a href="#">Twitter</a></li>
+        <li class="social"><a href="#">LinkedIn</a></li>
+      </ul>
+      <p class="copy">Copyright &copy; 2019 Tharindu Gardiyawasam</p>
+    </div>
     <script src="js/script.js"></script>
   </body>
 </html>

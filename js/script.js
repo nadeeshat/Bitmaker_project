@@ -1,13 +1,57 @@
+// bannerArr = ["banner2.jpg", "banner3.jpg", "banner4.jpg", "banner5.jpg", "banner6.jpg", "banner1.jpg"];
+// var c =0;
+//
+// bannerChange();
+//
+// function bannerChange()
+// {
+//   var imgName = bannerArr[c];
+//
+//   var setImage = setInterval(function(){
+//     document.getElementById("banner-image").src = `images/${imgName}`;
+//   }, 200);
+//
+//   c++;
+//
+//   if(c == bannerArr.length - 1)
+//   {
+//     c = 0;
+//   }
+//
+//   bannerChange();
+// }
 
 var allDeck = ["C2","C3","C4","C5","C6","C7","C8","C9","C10","CJ","CQ","CK","CA","D2","D3","D4","D5","D6","D7","D8","D9","D10","DJ","DQ","DK","DA","H2","H3","H4","H5","H6","H7","H8","H9","H10","HJ","HQ","HK","HA","S2","S3","S4","S5","S6","S7","S8","S9","S10","SJ","SQ","SK","SA"];
-var autoDeck = new Array(26);
-var userDeck = new Array(26);
+
+var allClubs = [];
+var allDiamonds = [];
+var allHearts = [];
+var allSpades = [];
+
+var allClubs2 = [];
+var allDiamonds2 = [];
+var allHearts2 = [];
+var allSpades2 = [];
+
+var autoDeck = [];
+var userDeck = [];
 
 var autoDeck2 = [];
 var userDeck2 = [];
 
 var autoWon = [];
 var userWon = [];
+
+var autoScore = 0;
+var userScore = 0;
+
+var autoCardsStart = 26;
+var userCardsStart = 26;
+
+document.getElementById("autoScore").innerHTML = autoScore;
+document.getElementById("userScore").innerHTML = userScore;
+document.getElementById("autoCards").innerHTML = autoCardsStart;
+document.getElementById("userCards").innerHTML = userCardsStart;
 
 var autoObj;
 var userObj;
@@ -26,11 +70,23 @@ var usertext = document.getElementById("username");
 
 play.addEventListener("click", playGame);
 
+usertext.addEventListener("focus", function(){
+  usertext.classList.remove("errorText");
+})
+
 var user = "";
 
 function playGame()
 {
+  if(usertext.value == "")
+  {
+    usertext.classList.add("errorText");
+    return;
+  }
+
   document.getElementById("play-table").classList.add("container");
+  document.getElementById("co-home").classList.remove("container-home");
+  document.getElementById("co-home").classList.add("container-home-play");
   document.getElementById("banner").classList.add("after-play");
   document.getElementById("details").classList.add("after-play");
   play.classList.add("after-play");
@@ -38,6 +94,10 @@ function playGame()
   document.getElementById("user-label").innerHTML = user;
   userlabel.classList.add("after-play");
   usertext.classList.add("after-play");
+  document.getElementById("co-rules").classList.remove("container-rules");
+  document.getElementById("co-rules").classList.add("before-play");
+  document.getElementById("co-cards").classList.remove("container-cards");
+  document.getElementById("co-cards").classList.add("before-play");
 }
 
 var start = document.getElementById("btn-play");
@@ -65,12 +125,14 @@ exit.addEventListener("click", exitGame);
 
 function exitGame()
 {
+  document.getElementById("co-home").classList.add("container-home");
   document.getElementById("play-table").classList.remove("container");
   document.getElementById("banner").classList.remove("after-play");
   document.getElementById("details").classList.remove("after-play");
   play.classList.remove("after-play");
   userlabel.classList.remove("after-play");
   usertext.classList.remove("after-play");
+  usertext.value = "";
   document.getElementById("buttons-play").classList.remove("buttons-after");
   document.getElementById("buttons-play").classList.add("buttons-before");
   document.getElementById("start-div").classList.remove("after-play");
@@ -84,16 +146,10 @@ function exitGame()
   document.getElementById("btn-select").classList.add("before-play");
 }
 
-// shuffle function distributes the cards between the 2 players at the game start. When this function runs, each player's hands are populated as array of card objects (autoDeck and userDeck)
 function shuffle()
 {
-  // for javascript, we dont need to specify the array length when we initialize it. In fact, doing a push on this will make the array length 27.  
-  // eg. autoArray = new Array(3)
-  // autoArray.push('testPush')
-  // autoArray here will be [undefined, undefined, undefined, 'testPush']
-
-  var autoArray = new Array(26);
-  var userArray = new Array(26);
+  var autoArray = [];
+  var userArray = [];
 
   for(var i=0;i<26;i++)
   {
@@ -108,6 +164,7 @@ function shuffle()
       autoArray.push(currentVal);
     }
   }
+
   for(var j=0;j<26;j++)
   {
     var currentVal = Math.floor(Math.random() * 52);
@@ -135,9 +192,7 @@ function shuffle()
     var cardType = card.substr(0,1);
     var cardVal = card.slice(1);
     var rank = 0;
-    // this switch/case is ok too, you could do an array here to represent the rank order:
-    // let ranks = ['A', 'K', 'Q', 'J', '10'...]
-    // cardRank = ranks.indexOf(cardVal)
+
     switch(cardVal){
       case 'A':
         rank=1;
@@ -190,6 +245,8 @@ function shuffle()
     autoObj = {type: cardType, val: cardVal, r: rank, img: image};
     autoDeck[n] = autoObj;
   }
+
+  autoCardsStart = autoDeck.length;
 
   console.log("User Player Cards");
   for(var m=0;m<userArray.length;m++)
@@ -257,13 +314,13 @@ function shuffle()
     //console.log(userDeck[m]).img);
   }
 
+  userCardsStart = userDeck.length;
   //console.log(userDeck['1'].img);
 }
 
 var viewBtn = document.getElementById("btn-view");
 viewBtn.addEventListener("click", loadCard);
 
-// loadCard will take the last card from teh autoDeck and tack it into the start of autoDeck2. If autoDeck runs out, it will reset autoDeck with autoDeck2. The last card from the userDeck is also taken and placed in userDeck2.
 function loadCard()
 {
     /*if(autoDeck2.length == 26)
@@ -285,6 +342,7 @@ function loadCard()
       document.getElementById("autoimg").src=`images/${autoImage}`;
       //console.log(autoCard.type);
       autoDeck2.unshift(autoCard);
+      //autoDeck2.push(autoCard);
       counter++;
     }
 
@@ -295,20 +353,26 @@ function loadCard()
     }
 
     userCard = userDeck.pop();
+
+    userCard = checkWonUser(userCard);
+
     var userImage = userCard.img;
     document.getElementById("userimg").src=`images/${userImage}`;
     //console.log(userCard.img);
     userDeck2.unshift(userCard);
+    //userDeck2.push(userCard);
 }
 
 var selectBtn = document.getElementById("btn-select");
 
 selectBtn.addEventListener("click", selectCard);
 
-// selectCard plays the round. A user may only win if they have the same suite as their opponent and a higher rank
 function selectCard()
 {
   //alert("Select Button Clicked !");
+  autoCardsStart--;
+  userCardsStart--;
+
   var autoType = autoCard.type;
   var autoRank = parseInt(autoCard.r);
   var autoVal = autoCard.val;
@@ -316,6 +380,39 @@ function selectCard()
   var userType = userCard.type;
   var userRank = parseInt(userCard.r);
   var userVal = userCard.val;
+
+  if(autoCardsStart == 0 && userCardsStart == 0)
+  {
+    document.getElementById("autoScore").innerHTML = autoScore;
+    document.getElementById("userScore").innerHTML = userScore;
+    document.getElementById("autoCards").innerHTML = autoCardsStart;
+    document.getElementById("userCards").innerHTML = userCardsStart;
+    document.getElementById("status-div").classList.remove("gameStatusBefore");
+    document.getElementById("status-div").classList.add("gameStatus");
+    document.getElementById("game-msg").innerHTML = "Game Over !";
+
+    if(autoScore > userScore)
+    {
+      document.getElementById("winner").innerHTML = "Tharindu Won";
+    }
+    else if(userScore > autoScore)
+    {
+      document.getElementById("winner").innerHTML = "You Won";
+    }
+    else
+    {
+      document.getElementById("winner").innerHTML = "It's a Draw";
+    }
+    document.getElementById("autoimg").src="images/blue_back_side.png";
+    document.getElementById("userimg").src="images/blue_back_side.png";
+
+    document.getElementById("start-div").classList.remove("after-play");
+    document.getElementById("view-div").classList.add("before-play");
+    document.getElementById("select-div").classList.add("before-play");
+    document.getElementById("btn-view").classList.remove("btn-view");
+    document.getElementById("btn-select").classList.remove("btn-select");
+    //document.getElementById("btn-play").classList.remove("after-play");
+  }
 
   //alert("Auto Type & value : "+autoType+" "+autoVal+" User Type & value : "+userType+" "+userVal);
 
@@ -328,34 +425,49 @@ function selectCard()
     {
       autoWon.push(autoCard);
       autoWon.push(userCard);
+
+      autoScore = autoScore + 5;
+
+      //autoCardsStart--;
+      //userCardsStart--;
     }
     else
     {
       userWon.push(userCard);
       userWon.push(autoCard);
+
+      userScore = userScore + 5;
+
+      //autoCardsStart--;
+      //userCardsStart--;
     }
   }
   else
   {
     autoWon.push(autoCard);
     autoWon.push(userCard);
+
+    autoScore = autoScore + 5;
+
+    //autoCardsStart--;
+    //userCardsStart--;
   }
-  // if the autoDeck has run out of cards, reset it
+
   if(autoDeck2.length == 26)
   {
     autoDeck = autoDeck2;
     autoDeck2 = [];
   }
-  // take the last card from the autoDeck and see if it has been played previously and won.
+
   autoCard = autoDeck.pop();
-  // if autoCard is an object representing the card, can we just set a boolean or stringfield on the autoCard when it's been won, and use that instead? 
-  // pop removes teh element from the array. I'm not sure if the intent here is to check the card that is currently displayed (which has already been popped off of autoDeck in loadCard) or to check the next card before it is played?
+
   autoCard = checkWonAuto(autoCard);
 
   var autoImage = autoCard.img;
   document.getElementById("autoimg").src=`images/${autoImage}`;
   //console.log(autoCard.type);
   autoDeck2.unshift(autoCard);
+  //autoDeck2.push(autoCard);
 
   if(userDeck2.length == 26)
   {
@@ -371,8 +483,14 @@ function selectCard()
   document.getElementById("userimg").src=`images/${userImage}`;
   //console.log(userCard.img);
   userDeck2.unshift(userCard);
+  //userDeck2.push(userCard);
+
+  document.getElementById("autoScore").innerHTML = autoScore;
+  document.getElementById("userScore").innerHTML = userScore;
+  document.getElementById("autoCards").innerHTML = autoCardsStart;
+  document.getElementById("userCards").innerHTML = userCardsStart;
 }
-// checks if curCard is already present in teh autoWon or userWon arrays (i.e. has this already been played)
+
 function checkWonAuto(curCard)
 {
   var okCard;
@@ -382,6 +500,7 @@ function checkWonAuto(curCard)
   {
     if((autoWon[a].type == curCard.type) && (autoWon[a].val == curCard.val))
     {
+      autoDeck2.unshift(curCard);//added later
       flag = 1;
     }
   }
@@ -390,13 +509,19 @@ function checkWonAuto(curCard)
   {
     if((userWon[b].type == curCard.type) && (userWon[b].val == curCard.val))
     {
+      autoDeck2.unshift(curCard);//added later
       flag = 1;
     }
   }
 
   if(flag == 1)
   {
-    // this will mutate autoDeck to remove the last card.  Should this just be taking the last index, or shifting this card into autoDeck2 at some point? 
+    if(autoDeck2.length == 26)
+    {
+      autoDeck = autoDeck2;
+      autoDeck2 = [];
+    }
+
     okCard = autoDeck.pop();
 
     okCard = checkWonAuto(okCard);
@@ -418,6 +543,7 @@ function checkWonUser(curCard)
   {
     if((autoWon[a].type == curCard.type) && (autoWon[a].val == curCard.val))
     {
+      userDeck2.unshift(curCard); //added later
       flag = 1;
     }
   }
@@ -426,12 +552,19 @@ function checkWonUser(curCard)
   {
     if((userWon[b].type == curCard.type) && (userWon[b].val == curCard.val))
     {
+      userDeck2.unshift(curCard); //added later
       flag = 1;
     }
   }
 
   if(flag == 1)
   {
+    if(userDeck2.length == 26)
+    {
+      userDeck = userDeck2;
+      userDeck2 = [];
+    }
+
     okCard = userDeck.pop();
 
     okCard = checkWonUser(okCard);
@@ -443,3 +576,132 @@ function checkWonUser(curCard)
 
   return okCard;
 }
+
+document.getElementById("rules").addEventListener("click", function()
+{
+  //alert("clicked");
+  document.getElementById("co-home").classList.remove("container-home");
+  document.getElementById("co-home").classList.add("container-home-play");
+  document.getElementById("banner").classList.add("before-play");
+  document.getElementById("details").classList.add("before-play");
+  document.getElementById("userlabel").classList.add("before-play");
+  document.getElementById("username").classList.add("before-play");
+  document.getElementById("start").classList.add("before-play");
+  document.getElementById("play-table").classList.remove("container");
+  document.getElementById("play-table").classList.add("before-play");
+  document.getElementById("co-cards").classList.remove("container-cards");
+  document.getElementById("co-cards").classList.add("before-play");
+  document.getElementById("co-credits").classList.remove("container-credits");
+  document.getElementById("co-credits").classList.add("before-play");
+  document.getElementById("co-rules").classList.add("container-rules");
+});
+
+document.getElementById("cardsDeck").addEventListener("click", function()
+{
+  //alert("clicked");
+  document.getElementById("co-home").classList.remove("container-home");
+  document.getElementById("co-home").classList.add("container-home-play");
+  document.getElementById("banner").classList.add("before-play");
+  document.getElementById("details").classList.add("before-play");
+  document.getElementById("userlabel").classList.add("before-play");
+  document.getElementById("username").classList.add("before-play");
+  document.getElementById("start").classList.add("before-play");
+  document.getElementById("play-table").classList.remove("container");
+  document.getElementById("play-table").classList.add("before-play");
+  document.getElementById("co-rules").classList.remove("container-rules");
+  document.getElementById("co-rules").classList.add("before-play");
+  document.getElementById("co-credits").classList.remove("container-credits");
+  document.getElementById("co-credits").classList.add("before-play");
+  document.getElementById("co-cards").classList.add("container-cards");
+});
+
+for(var z=0; z<allDeck.length; z++)
+{
+  if(z<13)
+  {
+    allClubs.push(allDeck[z]);
+  }
+  else if(z<26)
+  {
+    allDiamonds.push(allDeck[z]);
+  }
+  else if(z<39)
+  {
+    allHearts.push(allDeck[z]);
+  }
+  else
+  {
+    allSpades.push(allDeck[z]);
+  }
+}
+
+document.getElementById("btnSpade").addEventListener("click", function()
+{
+  var spadeImg = allSpades.pop();
+  allSpades2.unshift(spadeImg);
+  document.getElementById("sImg").src = `images/${spadeImg}.png`;
+
+  if(allSpades2.length == 13)
+  {
+    allSpades = allSpades2;
+    allSpades2 = [];
+  }
+});
+
+document.getElementById("btnHeart").addEventListener("click", function()
+{
+  var heartImg = allHearts.pop();
+  allHearts2.unshift(heartImg);
+  document.getElementById("hImg").src = `images/${heartImg}.png`;
+
+  if(allHearts2.length == 13)
+  {
+    allHearts = allHearts2;
+    allHearts2 = [];
+  }
+});
+
+document.getElementById("btnClub").addEventListener("click", function()
+{
+  var clubImg = allClubs.pop();
+  allClubs2.unshift(clubImg);
+  document.getElementById("cImg").src = `images/${clubImg}.png`;
+
+  if(allClubs2.length == 13)
+  {
+    allClubs = allClubs2;
+    allClubs2 = [];
+  }
+});
+
+document.getElementById("btnDiamond").addEventListener("click", function()
+{
+  var diamondImg = allDiamonds.pop();
+  allDiamonds2.unshift(diamondImg);
+  document.getElementById("dImg").src = `images/${diamondImg}.png`;
+
+  if(allDiamonds2.length == 13)
+  {
+    allDiamonds = allDiamonds2;
+    allDiamonds2 = [];
+  }
+});
+
+document.getElementById("credits").addEventListener("click", function(){
+
+  document.getElementById("co-home").classList.remove("container-home");
+  document.getElementById("co-home").classList.add("container-home-play");
+  document.getElementById("banner").classList.add("before-play");
+  document.getElementById("details").classList.add("before-play");
+  document.getElementById("userlabel").classList.add("before-play");
+  document.getElementById("username").classList.add("before-play");
+  document.getElementById("start").classList.add("before-play");
+  document.getElementById("play-table").classList.remove("container");
+  document.getElementById("play-table").classList.add("before-play");
+  document.getElementById("co-cards").classList.remove("container-cards");
+  document.getElementById("co-cards").classList.add("before-play");
+  document.getElementById("co-rules").classList.remove("container-rules");
+  document.getElementById("co-rules").classList.add("before-play");
+  document.getElementById("co-credits").classList.remove("before-play");
+  document.getElementById("co-credits").classList.add("container-credits");
+})
