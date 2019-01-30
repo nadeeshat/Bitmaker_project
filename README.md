@@ -18,7 +18,7 @@ Final Project Bitmaker
 
 	     2  < 3 < 4 < 5 < 6 < 7 < 8 < 9 < 10 < J < Q < K < A
 
-    6. Ultimately one player will left with no cards and therefore other player will be the winner. 
+    6. Player with the highest score at the time of finishing the cards will be the winner. 
 
 
 Additional Notes About the Rules:
